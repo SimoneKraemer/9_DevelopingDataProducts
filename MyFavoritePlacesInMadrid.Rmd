@@ -1,6 +1,6 @@
 ---
 title: "My favorite places in Madrid"
-author: "Simone Krämer"
+author: "Simone Kraemer"
 date: "9 März 2018"
 output: html_document
 ---
