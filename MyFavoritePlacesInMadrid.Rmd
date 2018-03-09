@@ -1,0 +1,39 @@
+---
+title: "My favorite places in Madrid"
+author: "Simone Krämer"
+date: "9 März 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE, warning =  FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(markdown)
+library(leaflet)
+library(xlsx)
+```
+
+These are some of my favorite places in Madrid/Spain:
+```{r, fig.align = 'center'}
+placesMadrid <- read.xlsx('MyFavoritePlacesInMadrid.xlsx', 1)
+kable(placesMadrid)
+```
+
+And here you can see them on a map; different categories are displayed by color and
+the size of the markers refer to how much I like the place:
+```{r, fig.align = 'center'}
+myMadrid <- leaflet() %>%
+            addTiles() %>%
+            addCircleMarkers(lng = placesMadrid$lng,
+                             lat = placesMadrid$lat,
+                             popup = placesMadrid$Name,
+                             color = placesMadrid$Color,
+                             weight = 4,
+                             radius = placesMadrid$Like * 3,
+                             clusterOptions = markerClusterOptions()) %>%
+            addLegend(labels = unique(placesMadrid$Type),
+                      colors = unique(placesMadrid$Color)) %>% 
+            addProviderTiles(providers$OpenStreetMap)
+myMadrid
+```
+
