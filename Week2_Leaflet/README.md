@@ -1,3 +1,3 @@
-# Repo for assignments for Coursera Course 9 Week 2
+# 9_DevelopingDataProducts/Week2_Leaflet
 
 Task was to create a map with leaflet
