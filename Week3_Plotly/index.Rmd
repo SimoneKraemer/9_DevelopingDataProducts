@@ -1,0 +1,128 @@
+---
+title: "New York Air Quality Measurements"
+author: "Simone Kraemer"
+date: "March 16th 2018"
+output: ioslides_presentation
+---
+
+<style type="text/css">
+code
+{ /* Code block */
+    font-size: 10px;
+    line-height: 1.0;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 15px;
+    line-height: 1.0;
+}
+</style>
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+library(plotly)
+```
+
+
+## Data
+
+The dataset used for these plots is the R dataset "airquality" which contains
+daily readings of the following air quality values for May 1, 1973 (a Tuesday)
+to September 30, 1973:
+
+- Ozone: Mean ozone in parts per billion from 1300 to 1500 hours at Roosevelt Island
+- Solar.R: Solar radiation in Langleys in the frequency band 4000-7700 Angstroms from 0800 to 1200 hours at Central Park
+- Wind: Average wind speed in miles per hour at 0700 and 1000 hours at LaGuardia Airport
+- Temp: Maximum daily temperature in degrees Fahrenheit at La Guardia Airport.
+
+In the diagrams, the ozone as a function of solar radiation, wind and temperature shall
+be shown.
+
+
+## Data Preparation
+
+Load dataset and delete data where "Ozone" is NA:
+```{r, echo = TRUE, comment = ""}
+dataAirQuality <- airquality
+dataAirQuality <- dataAirQuality[!is.na(dataAirQuality$Ozone), ]
+head(dataAirQuality)
+```
+
+
+## 2D-diagrams: Code for data plotting
+
+```{r, 2dplot, echo = TRUE, eval = FALSE, warning = FALSE}
+# Define axis-style
+x1 <- list(title = "Wind", autotick = TRUE)
+x2 <- list(title = "Solar Radiation", autotick = TRUE)
+x3 <- list(title = "Temperature", autotick = TRUE)
+y1 <- list(title = "Ozone", showticklabels = TRUE, showline = TRUE, zeroline = TRUE)
+y2 <- list(title = "", showticklabels = FALSE, showline = TRUE, zeroline = TRUE)
+y3 <- list(title = "", showticklabels = FALSE, showline = TRUE, zeroline = TRUE)
+
+# Define subplots
+p1 <- plot_ly(airquality, x = ~Wind, y = ~Ozone,
+              type = "scatter", mode = "markers",
+              marker=list(color = "blue" , size = 10 , opacity = 0.5)) %>%
+      layout(xaxis = x1, yaxis = y1, showlegend = FALSE)
+p2 <- plot_ly(airquality, x = ~Solar.R, y = ~Ozone,
+              type = "scatter", mode = "markers",
+              marker=list(color = "orange" , size = 10 , opacity = 0.5)) %>%
+      layout(xaxis = x2, yaxis = y2, showlegend = FALSE)
+p3 <- plot_ly(airquality, x = ~Temp, y = ~Ozone,
+              type = "scatter", mode = "markers",
+              marker=list(color = "red" , size = 10 , opacity = 0.5)) %>%
+      layout(xaxis = x3, yaxis = y3, showlegend = FALSE)
+
+# Put subplots together to one plot
+p2d <- subplot(p1, p2, p3, titleX = TRUE, titleY = TRUE)
+hide_legend(p2d)
+p2d
+```
+
+
+## 2D-diagrams:
+
+```{r, 2dplot, echo = FALSE, eval = TRUE, warning = FALSE}
+```
+
+
+## 3D-diagram: Code for data plotting
+
+```{r, 3dplot, echo = TRUE, eval = FALSE, warning = FALSE}
+
+# Define axis-style
+x <- list(title = "Wind", autotick = TRUE)
+y <- list(title = "Temperature", showticklabels = TRUE, showline = TRUE,
+          zeroline = TRUE)
+z <- list(title = "Solar Radiation", showticklabels = FALSE, showline = TRUE,
+          zeroline = TRUE)
+title <- "Ozone"
+
+# Define plot
+p3d <- plot_ly(airquality, x = ~Wind, y = ~Temp, z = ~Solar.R,
+               type = "scatter3d", mode = "markers", color = ~Ozone,
+               colors = "Blues",
+               marker = list(size = 10 , opacity = 1.5)) %>%
+       layout(title = title,
+              scene = list(xaxis = x, yaxis = y,zaxis = z))
+p3d
+```
+
+
+## 3D-diagram:
+
+```{r, 3dplot, echo = FALSE, eval = TRUE, warning = FALSE}
+```
+
+
+## Result
+
+It can be seen that there is a clear trend between  
+
+- Wind and Ozone: The higher the wind speed is, the lower the ozone values are
+- Temperature and Ozone: The higher the temperature is, the higher the ozone 
+values are
+
+For solar radiation and ozone the trend is not that clear, although a slight increase
+of ozone for higher solar radiation can be seen.
