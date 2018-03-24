@@ -89,3 +89,7 @@ AccuracyPValue  McnemarPValue
 
 So this model will be used to predict the species based on the user input.
 
+---
+
+## I hope you got curious to check this app out!
+
